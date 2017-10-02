@@ -1,0 +1,130 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Theme Made By www.w3schools.com - No Copyright -->
+  <title>R Cubed | Edit Project</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://use.fontawesome.com/1bbee19eb8.js"></script>
+
+  <link rel="stylesheet" href='{% static "css/styles.css" %}'>
+
+  {{ form.media }}
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="http://rcubedclub.herokuapp.com/">R Cubed</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="http://rcubedclub.herokuapp.com/projects/">PROJECTS</a></li>
+        <li><a href="" data-toggle="modal" data-target="#information">INFO</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Information Modal -->
+    <div class="modal fade" id="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title" id="myModalLabel4">Informations</h4>
+                    </div>
+                <div class="modal-body">
+                  {% for information in info %}
+                  <center>
+                    <p class="text-left"><strong>{{ information.info_title }}</strong> - {{ information.timestamp|timesince }} ago<br>
+                        {{ information.info|safe|linebreaks }}
+                    </p>
+                    </center>
+                    <hr/>
+                  {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <center>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Take Me Back</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/><br/><br/>
+
+{% if Error %}
+<div class="alert alert-danger alert-dismissable fade in alert">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{ Error }}</strong>
+  </div>
+{% endif %}
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-sm-12 col-md-7">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>Add a New Project</h3>
+                    <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+                        {{ form|crispy }}
+                        {{ form1|crispy }}
+                        <center><input type="submit" class="btn btn-primary" value="Submit Project"></center>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-12 col-md-5">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h3>How to submit projects?</h3>
+                    <p>
+                    <ul>
+                    	<li>Enter the name of your project in the Project Title Box.(Mandatory!)</li>
+                    	<li>Enter a short description of your project. Include functionalities, modules and technologies used.(Mandatory!)</li>
+                    	<li>Give a github link of the project in the Source Code Box.(Mandatory!)</li>
+                    	<li>Include the link to the webpage of your project if it is available.</li>
+                    	<li>Upload either a logo or a screenshot of your project!</li>
+                    	<li>Check the Developing or Developed checkbox if project is in the development phase otherwise uncheck it!</li>
+                	</ul>
+
+
+
+
+                    </p>
+                    <h3>What is my key?</h3>
+                    <p>Every team is assigned a key that will allow them to submit projects. If you don't have one, register your team by sending the details of your team on our Facebook Page or through E-Mail.</p>
+                    <h3>What are some Screenshot best practices?</h3>
+                    <ul>
+                        <li>Images will resolution 400X250 look best.</li>
+                        <li>Image size should be under 2MB.</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

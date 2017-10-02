@@ -1,0 +1,168 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <title>R Cubed | Members</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://use.fontawesome.com/1bbee19eb8.js"></script>
+
+  <link rel="stylesheet" href='{% static "css/styles.css" %}'>
+
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="http://rcubedclub.herokuapp.com/">R Cubed</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="http://rcubedclub.herokuapp.com/projects">PROJECTS</a></li>
+        <li><a href="http://rcubedclub.herokuapp.com/create">SUBMIT PROJECT</a></li>
+        <li><a href="" data-toggle="modal" data-target="#add">BECOME A MEMBER</a></li>
+        <li><a href="" data-toggle="modal" data-target="#information">INFO</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Information Modal -->
+<br/>
+    <div class="modal fade" id="information" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title" id="myModalLabel4">Informations</h4>
+                    </div>
+                <div class="modal-body">
+                  {% for information in info %}
+                  <center>
+                    <p class="text-left"><strong>{{ information.info_title }}</strong> - {{ information.timestamp|timesince }} ago<br>
+                        {{ information.info|safe|linebreaks }}
+                    </p>
+                    </center>
+                    <hr/>
+                  {% endfor %}
+                </div>
+                <div class="modal-footer">
+                    <center>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Take Me Back</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Team -->
+<br/>
+    <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+
+                    <h4 class="modal-title" id="myModalLabel4">Become a Member</h4>
+                    </div>
+                <div class="modal-body">
+                  <form method="POST" action="" enctype="multipart/form-data">{% csrf_token %}
+                        {{ form|crispy }}
+                        <center><input type="submit" class="btn btn-primary" value="Join the Club!"></center>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <center>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Take Me Back</button>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% if Error %}
+<br/>
+<div class="alert alert-danger alert-dismissable fade in alert">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong>{{ Error }}</strong>
+</div>
+{% endif %}
+
+<div class="container-fluid text-center">
+        <h3><strong>Members</strong></h3><br>
+        <div class="row">        
+        {% if members %}
+            {% for obj in members %}
+                {% if obj.active %}
+                <div class="col-sm-3">
+                      <div class="person"> <img src='{{ obj.Image.url }}' alt="" class="img-responsive"></div>
+                                <h4><strong>{{ obj.Name }}</strong></h4>
+                            <hr/>
+                            <p>Team :-
+                            <small>
+                                        {{ obj.Team_Name }}
+                            </small></p>
+
+                            <!-- Visit Link -->
+                            <a href="{{ obj.Facebook_Profile_Link }}" target="_blank"
+                               class="btn btn-primary btn-sm" role="button"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+
+                            {% if obj.Github_Profile_Link %}
+                            <a href="{{ obj.Github_Profile_Link }}" target="_blank"
+                               class="btn btn-primary btn-sm" role="button"><i class="fa fa-github" aria-hidden="true"></i></a>
+                            {% endif %}
+
+                            {% if obj.Linkedin_Profile_Link %}
+                            <a href="{{ obj.Linkedin_Profile_Link }}" target="_blank"
+                               class="btn btn-primary btn-sm" role="button"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                            {% endif %}
+                            <hr/>
+                </div>
+
+                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+
+<!-- Container (Contact Section) -->
+<div id="contact" class="container-fluid bg-grey text-center">
+  <h2 class="text-center" style="color:#e8e9ed">CONTACT</h2>
+  <p>Contact us and we'll get back to you soon.</p>
+  <p>
+        <i class="fa fa-phone" aria-hidden="true"> </i> 7619827798, 8299861603  |
+        <i class="fa fa-envelope" aria-hidden="true"></i> clubrcubed@gmail.com | 
+        <i class="fa fa-map-marker" aria-hidden="true"></i> BIET-Jhansi IN
+        
+    </p>
+
+    <button type="button" class="btn btn-default btn-md"
+                onclick="window.open('https://github.com/RCubedClub', '_blank')">
+            <i class="fa fa-github" aria-hidden="true"></i>
+    </button>
+
+    <button type="button" class="btn btn-default btn-md"
+                onclick="window.open('https://www.facebook.com/rcubedclub/?ref=br_rs', '_blank')">
+            <i class="fa fa-facebook" aria-hidden="true"></i>
+    </button>
+
+</div>
+</body>
+</html>
